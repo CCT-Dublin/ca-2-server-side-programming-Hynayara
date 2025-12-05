@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/CCT-Dublin/ca-2-server-side-programming-Hynayara/issues"
   },
-  "homepage": "https://github.com/CCT-Dublin/ca-2-server-side-programming-Hynayara#readme"
+  "homepage": "https://github.com/CCT-Dublin/ca-2-server-side-programming-Hynayara#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mysql": "^2.18.1"
+  }
 }
