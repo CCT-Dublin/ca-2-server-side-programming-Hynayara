@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/CCT-Dublin/ca-2-server-side-programming-Hynayara#readme",
   "dependencies": {
+    "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "mysql": "^2.18.1",
