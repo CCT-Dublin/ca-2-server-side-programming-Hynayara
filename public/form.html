@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Information Form</title>
+</head>
+<body>
+
+<h2>Personal Information Form</h2>
+
+<form id="dataForm">
+    <label>First Name:</label><br>
+    <input type="text" id="first_name"><br><br>
+
+    <label>Second Name:</label><br>
+    <input type="text" id="second_name"><br><br>
+
+    <label>Email:</label><br>
+    <input type="text" id="email"><br><br>
+
+    <label>Phone:</label><br>
+    <input type="text" id="phone"><br><br>
+
+    <label>Eircode:</label><br>
+    <input type="text" id="eircode"><br><br>
+
+    <button type="submit">Submit</button>
+</form>
+
+<p id="message"></p>
+
+<script>
+document.getElementById('dataForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const firstName = document.getElementById('first_name').value;
+    const secondName = document.getElementById('second_name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const eircode = document.getElementById('eircode').value;
+
+    const nameRegex = /^[A-Za-z0-9]{1,20}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{10}$/;
+    const eircodeRegex = /^[0-9][A-Za-z0-9]{5}$/;
+
+    if (!nameRegex.test(firstName) || !nameRegex.test(secondName)) {
+        return showMessage("Invalid name");
+    }
+
+    if (!emailRegex.test(email)) {
+        return showMessage("Invalid email");
+    }
+
+    if (!phoneRegex.test(phone)) {
+        return showMessage("Phone must be exactly 10 digits");
+    }
+
+    if (!eircodeRegex.test(eircode)) {
+        return showMessage("Invalid eircode");
+    }
+
+    showMessage("Form data is valid ✅");
+});
+
+function showMessage(msg) {
+    document.getElementById('message').innerText = msg;
+}
+</script>
+
+</body>
+</html>

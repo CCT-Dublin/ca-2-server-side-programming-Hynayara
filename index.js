@@ -1,16 +1,23 @@
+//mais server file responsible for handling routes and server setup
 console.log("Project started");
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const db = require('./database');
-const fs = require('fs');
-const csv = require('csv-parser');
+const db = require('./database');//import database connection
+const fs = require('fs');//file system module
+const csv = require('csv-parser');//csv parser module
+const path = require('path');//path module to handle file paths
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
+app.use(express.json());//middleware to parse JSON request bodies
+app.use(express.urlencoded({ extended: true }));//middleware to parse request bodies
+app.use(express.static('public'));//static files middleware
+// Basic route to check server status
 app.get('/', (req, res) => {
   res.send("Server is running!");
+});
+// Serve the HTML form
+app.get('/form', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'form.html'));
 });
 
 // Endpoint to import CSV data into the database
