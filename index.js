@@ -1,4 +1,4 @@
-//mais server file responsible for handling routes and server setup
+//main server file responsible for handling routes and server setup
 console.log("Project started");
 const express = require('express');
 const app = express();
@@ -7,7 +7,9 @@ const db = require('./database');//import database connection
 const fs = require('fs');//file system module
 const csv = require('csv-parser');//csv parser module
 const path = require('path');//path module to handle file paths
+const helmet = require('helmet');//security middleware
 
+app.use(helmet());
 app.use(express.json());//middleware to parse JSON request bodies
 app.use(express.urlencoded({ extended: true }));//middleware to parse request bodies
 app.use(express.static('public'));//static files middleware
@@ -19,9 +21,13 @@ app.get('/', (req, res) => {
 app.get('/form', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'form.html'));
 });
-
+// Function to sanitize input to prevent XSS attacks
+function sanitizeInput(value) {
+  return value.replace(/[<>]/g, "");
+}
 // Endpoint to import CSV data into the database
 app.get('/import-csv', (req, res) => {
+
   // Initialize counters and error tracking
   let rowNumber = 1;
   let errors = [];
@@ -33,6 +39,12 @@ app.get('/import-csv', (req, res) => {
       rowNumber++;
       //destructure from the current CSV row
       const { first_name, second_name, email, phone, eircode } = row;
+      // Sanitize inputs  
+      const safeFirstName = sanitizeInput(first_name);
+      const safeSecondName = sanitizeInput(second_name);
+      const safeEmail = sanitizeInput(email);
+      const safePhone = sanitizeInput(phone);
+      const safeEircode = sanitizeInput(eircode);
       // Validate data
       const nameRegex = /^[A-Za-z0-9]{1,20}$/;
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -56,7 +68,9 @@ app.get('/import-csv', (req, res) => {
         VALUES (?, ?, ?, ?, ?)
       `;
       // Execute the insert query
-      db.query(sql, [first_name, second_name, email, phone, eircode], (err) => {
+      db.query(
+      sql, [safeFirstName, safeSecondName, safeEmail, safePhone, safeEircode], 
+      (err) => {
         if (!err) inserted++;
       });
     })
