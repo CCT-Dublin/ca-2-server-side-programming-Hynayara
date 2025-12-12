@@ -21,6 +21,33 @@ app.get('/', (req, res) => {
 app.get('/form', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'form.html'));
 });
+// Handle form submission
+app.post('/submit-form', (req, res) => {
+  const { first_name, second_name, email, phone, eircode } = req.body;
+  // Sanitize inputs
+  const safeFirstName = sanitizeInput(first_name);
+  const safeSecondName = sanitizeInput(second_name);
+  const safeEmail = sanitizeInput(email);
+  const safePhone = sanitizeInput(phone);
+  const safeEircode = sanitizeInput(eircode);
+  // SQL Insert statement
+  const sql = `
+    INSERT INTO mysql_table
+    (first_name, second_name, email, phone, eircode) 
+    VALUES (?, ?, ?, ?, ?)
+  `;
+  // Execute the insert query
+  db.query(
+    sql, [safeFirstName, safeSecondName, safeEmail, safePhone, safeEircode],
+    (err) => {
+      if (err) {
+        console.error("Error inserting data:", err);
+        res.status(500).send("Error inserting data");
+        return;
+      }   
+      res.send("Data inserted successfully");
+    } );
+}); 
 // Function to sanitize input to prevent XSS attacks
 function sanitizeInput(value) {
   return value.replace(/[<>]/g, "");
@@ -33,12 +60,17 @@ app.get('/import-csv', (req, res) => {
   let errors = [];
   let inserted = 0;
   // Read and parse the CSV file
-  fs.createReadStream('data/Personal_information.csv')
-    .pipe(csv())
+  fs.createReadStream(path.join(__dirname, 'data', 'personal_information.csv'))
+
+    .pipe(csv({
+    mapHeaders: ({ header }) =>
+    header.trim().toLowerCase().replace(/\s+/g, '_')
+  }))
     .on('data', (row) => {
+      if (!row || object.keys(rom).length === 0) return;
       rowNumber++;
       //destructure from the current CSV row
-      const { first_name, second_name, email, phone, eircode } = row;
+      const { First_Name, Second_Name, Email, Phone, Eircode } = row;
       // Sanitize inputs  
       const safeFirstName = sanitizeInput(first_name);
       const safeSecondName = sanitizeInput(second_name);
