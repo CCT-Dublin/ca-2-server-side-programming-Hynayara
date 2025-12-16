@@ -18,5 +18,23 @@ connection.connect((err) => {
   }
   console.log("Connected to MySQL database");
 });
+// Ensure the table exists
+const checkTableSQL = `
+  CREATE TABLE IF NOT EXISTS mysql_table (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100),
+    second_name VARCHAR(100),
+    email VARCHAR(100),
+    phone VARCHAR(20),
+    eircode VARCHAR(20)
+  )
+`;
+connection.query(checkTableSQL, (err) => {
+  if (err) {
+    console.error("Error creating table:", err);
+  } else {
+    console.log("Table 'mysql_table' is ready");
+  }
+});
 
 module.exports = connection;
