@@ -50,6 +50,7 @@ app.post('/submit-form', (req, res) => {
 }); 
 // Function to sanitize input to prevent XSS attacks
 function sanitizeInput(value) {
+  if (!value) return value;
   return value.replace(/[<>]/g, "");
 }
 // Endpoint to import CSV data into the database
