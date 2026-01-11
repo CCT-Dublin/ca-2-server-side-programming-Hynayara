@@ -1,0 +1,27 @@
+# Cargar librerías
+library(tidyverse)
+library(ggplot2)
+
+# Cargar dataset
+df <- read.csv("student_depression_dataset.csv")
+
+# Ver tamaño
+dim(df)
+
+install.packages("tidyverse")
+library(tidyverse)
+data <- read_csv("student_depression_dataset.csv")
+
+list.files()
+
+[1] "student_depression_dataset.csv" "MentalHealthProject.Rproj"
+
+data <- read_csv("student_depression_dataset.csv")
+
+list.files()
+[1] "student_depression_dataset.csv" "MentalHealthProject.Rproj"
+
+list.files()
+[1] "student_depression_dataset.csv" "MentalHealthProject.Rproj"
+data <- read_csv("student_depression_dataset.csv")
+glimpse(data)
